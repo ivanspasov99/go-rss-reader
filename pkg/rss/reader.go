@@ -86,6 +86,7 @@ func processUrl(rssItems chan<- RssItem, urls <-chan string) {
 			item.SourceURL = rss.Channel.Link
 			rssItems <- item
 		}
+
 		resp.Body.Close()
 	}
 }
