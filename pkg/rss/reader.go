@@ -60,7 +60,6 @@ func Parse(urls []string) []RssItem {
 	for item := range r {
 		items = append(items, item)
 	}
-
 	return items
 }
 

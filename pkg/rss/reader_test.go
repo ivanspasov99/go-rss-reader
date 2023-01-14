@@ -79,7 +79,7 @@ var testParse = []struct {
 	expectedItemsSize int
 }{
 	{
-		"Test should parse rss feed correctly",
+		"Test should parse rss feed items correctly",
 		"./testdata/rss.xml",
 		map[string]RssItem{
 			"sub1-title": {
@@ -115,6 +115,15 @@ func TestParse(t *testing.T) {
 			}
 			validateItems(t, items, tt.expectedRssItems)
 		})
+	}
+}
+
+func TestParseWithEmptyUrls(t *testing.T) {
+	items := Parse([]string{})
+
+	if len(items) != 0 {
+		t.Errorf("Size of expected items 0 does not match actual %d", len(items))
+		return
 	}
 }
 
