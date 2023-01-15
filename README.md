@@ -8,7 +8,7 @@
 5. [Testing](#testing)
 
 ## `rss` Package
-This package provides a rss package to parse asynchronous multiple RSS feeds. It exports the following functions:
+This package provides a way to parse asynchronous multiple RSS feeds. It exports the following functions:
 
 ```go
 Parse(urls []string) []RssItem
@@ -18,8 +18,9 @@ They are called using GET request and failed or not correct ones are ignored in 
 The returned `rss.RssItems` are not sorted by published date.
 
 **Input**
-`urls` An array of strings representing the URLs of the RSS feeds to be parsed.
-All urls are called with `GET` and should return **XML RSS** 
+| Parameter | Description |
+| --- | --- |
+| `urls` | An array of strings representing the URLs of the RSS feeds to be parsed. All urls are called with `GET` and should return **XML RSS** | 
 
 **Output**
 An array of unordered by date `RssItem` that contain the parsed RSS feed information.
@@ -45,7 +46,7 @@ func main() {
 ```
 
 ## `meta` Package
-Package `meta` provides a function `ParseFeedAsJSON` to parse multiple RSS feeds, store them in a `JSON` file and print them on the screen. It exports the following function:
+Package `meta` provides a way to parse multiple RSS feeds, store them in a `JSON` file and print them on the screen. It exports the following function:
 
 ```go
 ParseFeedAsJSON(urls []string, filepath string, parse RSSParse) error
