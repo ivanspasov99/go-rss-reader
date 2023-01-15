@@ -54,9 +54,11 @@ ParseFeedAsJSON(urls []string, filepath string, parse RSSParse) error
 This function parses the RSS feeds specified in the urls parameter, stores the parsed data in a file specified by the filepath parameter as JSON and prints the parsed data on the screen.
 
 **Input**
-`urls`: An array of strings representing the URLs of the RSS feeds to be parsed. Refers to [rss package](#rss-package)
-`filepath`: A string representing the filepath where the parsed RSS feeds will be stored in JSON format.
-`parse`: A function that takes an array of strings representing the URLs of the RSS feeds to be parsed and returns an array of rss.RssItem structs that contain the parsed RSS feed information.
+| Parameter | Description |
+| --- | --- |
+| `urls` | An array of strings representing the URLs of the RSS feeds to be parsed. All urls are called with `GET` and should return **XML RSS** |
+| `filepath` | A string representing the filepath where the parsed RSS feeds will be stored in JSON format. |
+| `parse` function | A function that takes an array of strings representing the URLs of the RSS feeds to be parsed and returns an array of rss.RssItem structs that contain the parsed RSS feed information. |
 
 **Output**
 An error if any occurred, otherwise nil
