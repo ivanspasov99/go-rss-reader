@@ -1,5 +1,65 @@
 # RSS Reader
 
+## Table Of Content
+1. [Package `rss`](#rss-package)
+2. [Package `meta`](#meta-package)
+3. [Usage](#usage)
+4. [Developer Improvements Notes](#developer-improvement-notes)
+5. [Testing](#testing)
+
+## `rss` Package
+This package provides a rss package to parse asynchronous multiple RSS feeds. It exports the following functions:
+
+```go
+Parse(urls []string) []RssItem
+```
+The function asynchronously processes RSS feeds retrieved using the provided URLs.
+They are called using GET request and failed or not correct ones are ignored in the output
+The returned `rss.RssItems` are not sorted by published date.
+
+**Input**
+`urls` An array of strings representing the URLs of the RSS feeds to be parsed.
+All urls are called with `GET` and should return **XML RSS** 
+
+**Output**
+An array of unordered by date `RssItem` that contain the parsed RSS feed information.
+
+**Example**
+```go
+package main
+
+import (
+	"fmt"
+	"rss"
+)
+
+func main() {
+	// urls should return correct xml rss feed
+	urls := []string{"https://www.example.com/feed1", "https://www.example.com/feed2"}
+	items := rss.Parse(urls)
+
+	for _, item := range items {
+		fmt.Println(item)
+	}
+}
+```
+
+## `meta` Package
+Package `meta` provides a function `ParseFeedAsJSON` to parse multiple RSS feeds, store them in a `JSON` file and print them on the screen. It exports the following function:
+
+```go
+ParseFeedAsJSON(urls []string, filepath string, parse RSSParse) error
+```
+This function parses the RSS feeds specified in the urls parameter, stores the parsed data in a file specified by the filepath parameter as JSON and prints the parsed data on the screen.
+
+**Input**
+`urls`: An array of strings representing the URLs of the RSS feeds to be parsed. Refers to [rss package](#rss-package)
+`filepath`: A string representing the filepath where the parsed RSS feeds will be stored in JSON format.
+`parse`: A function that takes an array of strings representing the URLs of the RSS feeds to be parsed and returns an array of rss.RssItem structs that contain the parsed RSS feed information.
+
+**Output**
+An error if any occurred, otherwise nil
+
 ## Usage
 - Find real RSS feed API urls which can be used
 - Feeds can be retrieved using `rss.Parse` package
