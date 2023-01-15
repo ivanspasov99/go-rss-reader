@@ -63,6 +63,27 @@ This function parses the RSS feeds specified in the urls parameter, stores the p
 **Output**
 An error if any occurred, otherwise nil
 
+**Example**
+```go
+package main
+
+import (
+	"fmt"
+	"meta"
+	"rss"
+)
+
+func main() {
+   // urls should return correct xml rss feed
+	urls := []string{"https://www.example.com/feed1", "https://www.example.com/feed2"}
+	filepath := "feeds.json"
+	err := meta.ParseFeedAsJSON(urls, filepath, rss.Parse)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ## Usage
 - Find real RSS feed API urls which can be used
 - Feeds can be retrieved using `rss.Parse` package
