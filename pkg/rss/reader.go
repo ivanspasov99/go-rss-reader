@@ -9,11 +9,10 @@ import (
 )
 
 type RssItem struct {
-	Title     string `xml:"title"`
-	Source    string
-	SourceURL string
-	Link      string `xml:"link"`
-	// TODO handle time
+	Title       string `xml:"title"`
+	Source      string
+	SourceURL   string
+	Link        string `xml:"link"`
 	PublishDate time.Time
 	Description string `xml:"description"`
 }
@@ -29,7 +28,7 @@ type rss struct {
 	Channel channel `xml:"channel"`
 }
 
-// Parse asynchronously process rss feeds retrieved using input urls
+// Parse asynchronously process rss feeds retrieved using urls
 // Returned RssItems are not sorted by Date
 func Parse(urls []string) []RssItem {
 	var items []RssItem
@@ -38,7 +37,7 @@ func Parse(urls []string) []RssItem {
 	r := make(chan RssItem)
 
 	// the following number of goroutines with average request of 200 millisecond would parse all urls for ~5s
-	nWorkers := len(urls) / 4
+	nWorkers := calculateWorkers(len(urls))
 	workers := int32(nWorkers)
 	for i := 0; i < nWorkers; i++ {
 		go func() {
@@ -94,4 +93,11 @@ func processUrl(rssItems chan<- RssItem, urls <-chan string) {
 
 		resp.Body.Close()
 	}
+}
+
+func calculateWorkers(urls int) int {
+	if urls < 4 {
+		return 1
+	}
+	return urls / 4
 }

@@ -155,3 +155,23 @@ func validateItems(t *testing.T, items []RssItem, expectedRssItems map[string]Rs
 		}
 	}
 }
+
+var testCalculateWorkers = []struct {
+	name            string
+	urlsNumber      int
+	expectedWorkers int
+}{
+	{"Test with 1 url should return 1 worker", 1, 1},
+	{"Test with 2 url should return 1 worker", 2, 1},
+	{"Test with 3 url should return 1 worker", 3, 1},
+	{"Test with 4 url should return 1 worker", 4, 1},
+	{"Test with 8 url should return 2 workers", 8, 2},
+}
+
+func TestCalculateWorkers(t *testing.T) {
+	for _, tt := range testCalculateWorkers {
+		if calculateWorkers(tt.urlsNumber) != tt.expectedWorkers {
+			t.Errorf("Expected %d worker but got %d", tt.expectedWorkers, calculateWorkers(tt.urlsNumber))
+		}
+	}
+}
