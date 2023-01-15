@@ -37,8 +37,8 @@ func Parse(urls []string) []RssItem {
 	u := make(chan string, len(urls))
 	r := make(chan RssItem)
 
-	// formula could be used to identify appropriate number of goroutines
-	nWorkers := 5
+	// the following number of goroutines with average request of 200 millisecond would parse all urls for ~5s
+	nWorkers := len(urls) / 4
 	workers := int32(nWorkers)
 	for i := 0; i < nWorkers; i++ {
 		go func() {
@@ -65,18 +65,24 @@ func Parse(urls []string) []RssItem {
 
 func processUrl(rssItems chan<- RssItem, urls <-chan string) {
 	for url := range urls {
+		fmt.Println("url processed", url)
 		resp, err := http.Get(url)
 		if err != nil {
 			// Log or send to Sentry (Monitoring/Alerting tool) for example if no error option appear
 			// return error if possible
-			fmt.Println("Get request have failed")
+			fmt.Println("Get request have failed ", err)
 			continue
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			fmt.Println("Status code is not OK", resp.StatusCode)
+			return
 		}
 
 		var rss rss
 		if err := xml.NewDecoder(resp.Body).Decode(&rss); err != nil {
 			resp.Body.Close()
-			fmt.Println("Decode xml has failed")
+			fmt.Println("Decode xml has failed", err)
 			continue
 		}
 
