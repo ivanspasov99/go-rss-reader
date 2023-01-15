@@ -38,12 +38,12 @@ func Parse(urls []string) []RssItem {
 
 	// the following number of goroutines with average request of 200 millisecond would parse all urls for ~5s
 	nWorkers := calculateWorkers(len(urls))
-	workers := int32(nWorkers)
+	workers := int64(nWorkers)
 	for i := 0; i < nWorkers; i++ {
 		go func() {
 			defer func() {
-				// Last one out closes does -1 to workers for every finished go routine
-				if atomic.AddInt32(&workers, -1) == 0 {
+				// Last one out closes channel
+				if atomic.AddInt64(&workers, -1) == 0 {
 					close(r)
 				}
 			}()
@@ -64,7 +64,6 @@ func Parse(urls []string) []RssItem {
 
 func processUrl(rssItems chan<- RssItem, urls <-chan string) {
 	for url := range urls {
-		fmt.Println("url processed", url)
 		resp, err := http.Get(url)
 		if err != nil {
 			// Log or send to Sentry (Monitoring/Alerting tool) for example if no error option appear
@@ -90,7 +89,6 @@ func processUrl(rssItems chan<- RssItem, urls <-chan string) {
 			item.SourceURL = rss.Channel.Link
 			rssItems <- item
 		}
-
 		resp.Body.Close()
 	}
 }
