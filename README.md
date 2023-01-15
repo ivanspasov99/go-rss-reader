@@ -24,6 +24,7 @@ My solution is limited by the task. Extension which I would have added
    - Passing enum value and generate stream writer object on runtime
 7. All logs should be in JSON format (`zerolog` could be used)
 8. Testing could be more extensive
+9. `rss.Parse` is function, as I do not find it semantically (OOP) correct to be method
 
 
 ## Testing

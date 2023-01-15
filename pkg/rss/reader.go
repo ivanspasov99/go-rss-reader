@@ -68,6 +68,7 @@ func processUrl(rssItems chan<- RssItem, urls <-chan string) {
 		if err != nil {
 			// Log or send to Sentry (Monitoring/Alerting tool) for example if no error option appear
 			// return error if possible
+			// Log in JSON format
 			fmt.Println("Get request have failed ", err)
 			continue
 		}

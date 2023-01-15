@@ -26,6 +26,7 @@ func ParseFeedAsJSON(urls []string, filepath string, parse RSSParse) error {
 	}
 
 	for _, item := range items {
+		// Log in JSON
 		fmt.Println("Title:", item.Title)
 		fmt.Println("Source:", item.Source)
 		fmt.Println("Source URL:", item.SourceURL)
