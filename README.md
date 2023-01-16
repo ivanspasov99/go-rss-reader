@@ -46,18 +46,18 @@ func main() {
 ```
 
 ## `meta` Package
-Package `meta` provides a way to parse multiple RSS feeds, store them in a `JSON` file and print them on the screen. It exports the following function:
+Package `meta` provides a way to parse multiple RSS feeds, writes the parsed data in a stream as JSON and print them on the screen. It exports the following function:
 
 ```go
-ParseFeedAsJSON(urls []string, filepath string, parse RSSParse) error
+ParseFeedAsJSON(urls []string, w io.Writer, parse RSSParse) error
 ```
-This function parses the RSS feeds specified in the urls parameter, stores the parsed data in a file specified by the filepath parameter as JSON and prints the parsed data on the screen.
+This function parses the RSS feeds specified in the urls parameter, writes the parsed data in a stream as JSON and prints the parsed data on the screen.
 
 **Input**
 | Parameter | Description |
 | --- | --- |
 | `urls` | An array of strings representing the URLs of the RSS feeds to be parsed. All urls are called with `GET` and should return **XML RSS** |
-| `filepath` | A string representing the filepath where the parsed RSS feeds will be stored in JSON format. |
+| `w` | Writer stream which parsed JSON data will be passed to |
 | `parse` function | A function that takes an array of strings representing the URLs of the RSS feeds to be parsed and returns an array of rss.RssItem structs that contain the parsed RSS feed information. |
 
 **Output**
@@ -103,12 +103,9 @@ My solution is limited by the task. Extension which I would have added
    - Horizontal/Vertical Scaling options should be evaluated
 5. Goroutines Number decision - Average API call takes around 200milliseconds. Simulated 5 goroutines with 200 urls which takes around 4s to complete, which gives us 1/4 of the urls.
    - Amdahl's law could be used for optimization also
-6. `meta.SaveToJSON` - prefer using more generalized approach would make the code more extensible and testable:
-   - Passing Encoder or Writer Interface so you can write to any stream
-   - Passing enum value and generate stream writer object on runtime
-7. All logs should be in JSON format (`zerolog` could be used)
-8. Testing could be more extensive
-9. `rss.Parse` is function, as I do not find it semantically (OOP) correct to be method
+6. All logs should be in JSON format (`zerolog` could be used)
+7. Testing could be more extensive
+8. `rss.Parse` is a function, as I do not find it semantically (OOP) correct to be method
 
 
 ## Testing

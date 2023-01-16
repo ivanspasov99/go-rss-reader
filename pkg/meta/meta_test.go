@@ -1,11 +1,9 @@
 package meta
 
 import (
-	"encoding/json"
-	"fmt"
+	"bytes"
 	"github.com/ivanspasov99/rss-reader/pkg/rss"
-	"os"
-	"reflect"
+	"io"
 	"testing"
 	"time"
 )
@@ -31,29 +29,18 @@ func ParseMock(urls []string) []rss.RssItem {
 	}
 }
 
+// Could be refactored ass TDT with various inputs
 func TestParseFeedAsJSON(t *testing.T) {
-	tempFile, err := os.CreateTemp("", "rssitems.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.Remove(tempFile.Name())
+	var buf bytes.Buffer
+	w := io.Writer(&buf)
 
-	if err := ParseFeedAsJSON(nil, tempFile.Name(), ParseMock); err != nil {
-		t.Fatal("Unexpected error:", err)
+	if err := ParseFeedAsJSON(nil, w, ParseMock); err != nil {
+		t.Errorf("ParseFeedAsJSON returned an error: %v", err)
 	}
 
-	if _, err := os.Stat(tempFile.Name()); os.IsNotExist(err) {
-		t.Fatal("Expected file to be created but it does not exist")
-	}
-
-	var items []rss.RssItem
-	if err := json.NewDecoder(tempFile).Decode(&items); err != nil {
-		fmt.Println("Error decoding JSON:", err)
-		return
-	}
-
-	if !reflect.DeepEqual(items, ParseMock(nil)) {
-		t.Fatal("Expected items are not the same as in the file")
+	expectedJSON := "[{\"Title\":\"sub1-title\",\"Source\":\"main-title\",\"SourceURL\":\"main-link\",\"Link\":\"sub1-link\",\"PublishDate\":\"2022-01-03T15:04:05Z\",\"Description\":\"sub1-desc\"},{\"Title\":\"sub2-title\",\"Source\":\"main-title\",\"SourceURL\":\"main-link\",\"Link\":\"sub2-link\",\"PublishDate\":\"2022-01-03T15:04:05Z\",\"Description\":\"sub2-desc\"}]"
+	if buf.String() != expectedJSON {
+		t.Errorf("Unexpected JSON output. Got: %s, Want: %s", buf.String(), expectedJSON)
 	}
 
 }

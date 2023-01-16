@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ivanspasov99/rss-reader/pkg/meta"
 	"github.com/ivanspasov99/rss-reader/pkg/rss"
+	"os"
 )
 
 func ParseMock(urls []string) []rss.RssItem {
@@ -26,8 +27,15 @@ func ParseMock(urls []string) []rss.RssItem {
 }
 
 func main() {
-	if err := meta.ParseFeedAsJSON(nil, "./rss.json", ParseMock); err != nil {
+	f, err := os.Create("./rss.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if err := meta.ParseFeedAsJSON(nil, f, ParseMock); err != nil {
 		fmt.Println(err)
 		return
 	}
+
+	f.Close()
 }

@@ -4,24 +4,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ivanspasov99/rss-reader/pkg/rss"
-	"os"
+	"io"
 )
 
 type RSSParse func([]string) []rss.RssItem
 
-// ParseFeedAsJSON parses feed, stores it in a file as JSON and prints it on the stdout
-func ParseFeedAsJSON(urls []string, filepath string, parse RSSParse) error {
+// ParseFeedAsJSON parses feed based on urls used for the parse function, writes it in a stream as JSON and prints it on the stdout
+func ParseFeedAsJSON(urls []string, w io.Writer, parse RSSParse) error {
 	items := parse(urls)
 
-	file, err := os.Create(filepath)
+	b, err := json.Marshal(items)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
 
-	enc := json.NewEncoder(file)
-	enc.SetIndent("", "  ")
-	if err := enc.Encode(items); err != nil {
+	_, err = w.Write(b)
+	if err != nil {
 		return err
 	}
 
