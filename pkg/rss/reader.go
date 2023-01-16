@@ -2,7 +2,6 @@ package rss
 
 import (
 	"encoding/xml"
-	"fmt"
 	"net/http"
 	"sync/atomic"
 	"time"
@@ -66,22 +65,18 @@ func processUrl(rssItems chan<- RssItem, urls <-chan string) {
 	for url := range urls {
 		resp, err := http.Get(url)
 		if err != nil {
-			// Log or send to Sentry (Monitoring/Alerting tool) for example if no error option appear
-			// return error if possible
-			// Log in JSON format
-			fmt.Println("Get request have failed ", err)
+			// Send to Sentry (Monitoring/Alerting tool) for example if no error option appear
+			// use thread safe logger
 			continue
 		}
 
 		if resp.StatusCode != http.StatusOK {
-			fmt.Println("Status code is not OK", resp.StatusCode)
-			return
+			continue
 		}
 
 		var rss rss
 		if err := xml.NewDecoder(resp.Body).Decode(&rss); err != nil {
 			resp.Body.Close()
-			fmt.Println("Decode xml has failed", err)
 			continue
 		}
 

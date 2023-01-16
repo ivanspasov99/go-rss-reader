@@ -29,7 +29,7 @@ func ParseMock(urls []string) []rss.RssItem {
 	}
 }
 
-// Could be refactored ass TDT with various inputs
+// Could be refactored as TDT with various inputs
 func TestParseFeedAsJSON(t *testing.T) {
 	var buf bytes.Buffer
 	w := io.Writer(&buf)

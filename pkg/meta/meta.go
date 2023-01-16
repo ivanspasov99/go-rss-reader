@@ -2,7 +2,7 @@ package meta
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/ivanspasov99/rss-reader/pkg/logging"
 	"github.com/ivanspasov99/rss-reader/pkg/rss"
 	"io"
 )
@@ -23,15 +23,19 @@ func ParseFeedAsJSON(urls []string, w io.Writer, parse RSSParse) error {
 		return err
 	}
 
-	for _, item := range items {
-		// Log in JSON
-		fmt.Println("Title:", item.Title)
-		fmt.Println("Source:", item.Source)
-		fmt.Println("Source URL:", item.SourceURL)
-		fmt.Println("Link:", item.Link)
-		fmt.Println("Publish date:", item.PublishDate)
-		fmt.Println("Description:", item.Description)
-		fmt.Println()
-	}
+	printRssItems(items)
 	return nil
+}
+
+func printRssItems(items []rss.RssItem) {
+	for _, item := range items {
+		logging.GetLogger().
+			Info().
+			Str("Title:", item.Title).
+			Str("Source:", item.Source).
+			Str("Source URL:", item.SourceURL).
+			Str("Link:", item.Link).
+			Str("Publish date:", item.PublishDate.String()).
+			Str("Description:", item.Description)
+	}
 }

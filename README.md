@@ -85,10 +85,11 @@ func main() {
 ```
 
 ## Usage
-- Find real RSS feed API urls which can be used
-- Feeds can be retrieved using `rss.Parse` package
-- You can save feeds and prints to stdout with `meta.ParseFeedAsJSON` using `rss.Parse` function or other custom implemented one 
->For testing purposes you can define function of `type RSSParse func([]string) []rss.RssItem` which could be used as mocking. [Example](pkg/meta/meta_test.go)
+Start the application by using `go run main.go`
+
+Feed Options:
+1. Find real RSS feed API urls
+2. You can define function of `type RSSParse func([]string) []rss.RssItem` which could be used as mocking. [Example](main.go)
 
 ## Developer Improvement Notes
 My solution is limited by the task. Extension which I would have added 
@@ -103,7 +104,7 @@ My solution is limited by the task. Extension which I would have added
    - Horizontal/Vertical Scaling options should be evaluated
 5. Goroutines Number decision - Average API call takes around 200milliseconds. Simulated 5 goroutines with 200 urls which takes around 4s to complete, which gives us 1/4 of the urls.
    - Amdahl's law could be used for optimization also
-6. All logs should be in JSON format (`zerolog` could be used)
+6. Logs are in JSON format (required by most of the monitoring tools) but logger implementation could vary depending on the context/domain/usecase of the application. I have decided to do singleton logger retrievable through the whole app just for example. Thread safe logger should be used in concurrent application if logs are required. 
 7. Testing could be more extensive
 8. `rss.Parse` is a function, as I do not find it semantically (OOP) correct to be method
 
