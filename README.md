@@ -92,7 +92,8 @@ Feed Options:
 2. You can define function of `type RSSParse func([]string) []rss.RssItem` which could be used as mocking. [Example](main.go)
 
 ## Developer Improvement Notes
-My solution is limited by the task. Extension which I would have added 
+My solution is partially limited by the task. Some extensions/reseraches which I would have added/done in work environment
+ 
 1. `rss.Parse` package: 
    - function should return error or implement alert mechanism using Sentry (Alerting/Monitoring) for all failed feed retrievals. Afterward error testing could be added also
    - could accept http client so it could be mockable/configurable
