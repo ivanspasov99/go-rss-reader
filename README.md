@@ -76,11 +76,17 @@ import (
 func main() {
    // urls should return correct xml rss feed
 	urls := []string{"https://www.example.com/feed1", "https://www.example.com/feed2"}
-	filepath := "feeds.json"
-	err := meta.ParseFeedAsJSON(urls, filepath, rss.Parse)
+	f, err := os.Create("./rss.json")
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	if err := meta.ParseFeedAsJSON(nil, f, ParseMock); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	f.Close()
 }
 ```
 
