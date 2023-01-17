@@ -74,7 +74,7 @@ import (
 )
 
 func main() {
-   // urls should return correct xml rss feed
+   	// urls should return correct xml rss feed
 	urls := []string{"https://www.example.com/feed1", "https://www.example.com/feed2"}
 	f, err := os.Create("./rss.json")
 	if err != nil {
